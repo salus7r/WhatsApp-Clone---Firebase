@@ -6,7 +6,7 @@ type Props = {}
 
 const Chat = (props: Props) => {
     return (
-        <div className="chat">Chat</div>
+        <div className="chat"></div>
     )
 }
 
