@@ -28,7 +28,7 @@ const SidebarChat: React.FC<Props> = (props) => {
 			setLoading(true);
 
 			const docRef = await addDoc(collection(db, "rooms"), {
-				name: "chatName",
+				name: chatName,
 			});
 
 			setLoading(false);
