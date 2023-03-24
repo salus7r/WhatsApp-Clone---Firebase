@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { Avatar, IconButton } from "@mui/material";
 import { AttachFile, InsertEmoticon, Mic, MoreVert, SearchOutlined } from "@mui/icons-material";
 
@@ -10,7 +10,17 @@ type Props = {};
 const Chat: React.FC<Props> = (props) => {
 	const seed = useSeedAvatar();
 
-	const sendMessage = useCallback(() => {}, []);
+	const [input, setInput] = useState("");
+
+	const sendMessage = useCallback(
+		(e: any) => {
+			e.preventDefault();
+
+			console.log("You typed " + input);
+			setInput("");
+		},
+		[input],
+	);
 
 	return (
 		<div className="chat">
@@ -47,7 +57,12 @@ const Chat: React.FC<Props> = (props) => {
 			<div className="chat__footer">
 				<InsertEmoticon />
 				<form>
-					<input type="text" placeholder="Type a message" />
+					<input
+						type="text"
+						placeholder="Type a message"
+						value={input}
+						onChange={(e) => setInput(e.target.value)}
+					/>
 					<button type="submit" onClick={sendMessage}>
 						Send a message
 					</button>
