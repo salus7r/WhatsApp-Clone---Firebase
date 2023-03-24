@@ -9,6 +9,17 @@
 	background-color: #ebebeb;
 }
 
+.sidebarChat__info {
+	padding-left: 15px;
+}
+
 .sidebarChat__info > h2 {
 	font-size: 16px;
+	padding-bottom: 3px;
+}
+
+.sidebarChat__info > p {
+	font-size: 14.5px;
+	/* font-weight: 400; */
+	color: darkslategray;
 }
