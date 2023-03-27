@@ -6,6 +6,7 @@ import { collection, onSnapshot, DocumentData } from "firebase/firestore";
 import SidebarChat from "../SidebarChat";
 
 import db from "../../firebase";
+import { useStateValue } from "../../store/StateProvider";
 
 import "./sidebar.css";
 
@@ -17,6 +18,8 @@ type Room = {
 
 const Sidebar: React.FC<Props> = (props) => {
 	const [rooms, setRooms] = useState<Room[]>([]);
+
+	const [{ user }, dispatch] = useStateValue();
 
 	useEffect(() => {
 		const unsubscribe = onSnapshot(collection(db, "rooms"), (snapshot) => {
@@ -31,7 +34,12 @@ const Sidebar: React.FC<Props> = (props) => {
 	return (
 		<div className="sidebar">
 			<div className="sidebar__header">
-				<Avatar />
+				<Avatar
+					src={user?.photoURL}
+					imgProps={{
+						referrerPolicy: "no-referrer",
+					}}
+				/>
 				<div className="sidebar__headerRight">
 					<IconButton title={"Statuses"}>
 						<DonutLarge />
