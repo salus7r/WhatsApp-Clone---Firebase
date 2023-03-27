@@ -7,6 +7,6 @@ VITE was used for development / bundling.
 
 Github actions for CI/CD has also setup for the deployment tor firebase.
 
-You can visit here to DEMO the app, just use your google (gmail) account to login and it will save your user into React Context API until you refresh the app an load all of your chats, messages and your google account avatar.
+You can visit [here](https://whatsapp-clone-s7r.web.app/) to DEMO the app, just use your google (gmail) account to login and it will save your user into React Context API until you refresh the app an load all of your chats, messages and your google account avatar.
 
 Thanks
