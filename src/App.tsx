@@ -22,10 +22,25 @@ const App: React.FC = () => {
 			) : (
 				<div className={"app__body"}>
 					<Suspense fallback={"Loading..."}>
-						<Sidebar />
 						<Routes>
-							<Route path={"/rooms/:roomId"} element={<AsyncChat />} />
-							<Route path={"/"} element={<AsyncChat />} />
+							<Route
+								path={"/rooms/:roomId"}
+								element={
+									<>
+										<Sidebar />
+										<AsyncChat />
+									</>
+								}
+							/>
+							<Route
+								path={"/"}
+								element={
+									<>
+										<Sidebar />
+										<AsyncChat />
+									</>
+								}
+							/>
 						</Routes>
 					</Suspense>
 				</div>
