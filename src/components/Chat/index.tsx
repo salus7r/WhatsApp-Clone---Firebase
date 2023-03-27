@@ -1,46 +1,81 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { doc, onSnapshot, Unsubscribe } from "firebase/firestore";
+import {
+	doc,
+	collection,
+	query,
+	onSnapshot,
+	Unsubscribe,
+	orderBy,
+	DocumentData,
+	addDoc,
+	serverTimestamp,
+} from "firebase/firestore";
 import { Avatar, IconButton } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { AttachFile, InsertEmoticon, Mic, MoreVert, SearchOutlined } from "@mui/icons-material";
 
 import useSeedAvatar from "./../../hooks/useSeedAvatar";
+import { useStateValue } from "../../store/StateProvider";
 
 import db from "../../firebase";
 
 import "./chat.css";
 
 type Props = {};
+type Message = DocumentData;
 
 const Chat: React.FC<Props> = (props) => {
 	const [input, setInput] = useState("");
 	const [roomName, setRoomName] = useState("");
+	const [messages, setMessages] = useState<Message[]>([]);
+
+	const [{ user }] = useStateValue();
 
 	const { roomId } = useParams();
 	const seed = useSeedAvatar(roomId);
 
 	useEffect(() => {
-		let unsubscribe: Unsubscribe;
+		let unSubRoom: Unsubscribe;
+		let unSubRoomCollection: Unsubscribe;
 
 		if (roomId) {
-			unsubscribe = onSnapshot(doc(db, "rooms", roomId), (snapshot) => {
+			unSubRoom = onSnapshot(doc(db, "rooms", roomId), (snapshot) => {
 				setRoomName(snapshot.data()?.name);
+			});
+
+			const q = query(
+				collection(db, "rooms", roomId, "messages"),
+				orderBy("timestamp", "asc"),
+			);
+
+			unSubRoomCollection = onSnapshot(q, (snapshot) => {
+				setMessages(snapshot.docs.map((doc) => doc.data()));
 			});
 		}
 
 		return () => {
-			unsubscribe();
+			unSubRoom();
+			unSubRoomCollection();
 		};
 	}, [roomId]);
 
 	const sendMessage = useCallback(
-		(e: any) => {
+		async (e: any) => {
 			e.preventDefault();
 
-			console.log("You typed " + input);
-			setInput("");
+			if (roomId) {
+				setInput("");
+
+				await addDoc(collection(db, "rooms", roomId, "messages"), {
+					message: input,
+					name: user.displayName,
+					timestamp: serverTimestamp(),
+				});
+			} else {
+				alert("Please select a room first");
+			}
 		},
-		[input],
+		[roomId, user, input],
 	);
 
 	return (
@@ -64,16 +99,22 @@ const Chat: React.FC<Props> = (props) => {
 				</div>
 			</div>
 			<div className="chat__body">
-				<p className="chat__message">
-					<span className="chat__name">Salman Zahid Latif</span>
-					Hey Guys...
-					<span className="chat__timeStamp">3:52pm</span>
-				</p>
-				<p className={`chat__message ${true && "chat__receiver"}`}>
-					<span className="chat__name">Salman Zahid Latif</span>
-					Hey Guys...
-					<span className="chat__timeStamp">3:52pm</span>
-				</p>
+				{messages?.map((message) => {
+					return (
+						<p
+							className={`chat__message ${
+								message.name === user.displayName && "chat__receiver"
+							}`}
+							key={message.id}
+						>
+							<span className="chat__name">{message.name}</span>
+							{message.message}
+							<span className="chat__timeStamp">
+								{new Date(message.timestamp?.toDate()).toUTCString()}
+							</span>
+						</p>
+					);
+				})}
 			</div>
 			<div className="chat__footer">
 				<InsertEmoticon />

@@ -19,7 +19,7 @@ type Room = {
 const Sidebar: React.FC<Props> = (props) => {
 	const [rooms, setRooms] = useState<Room[]>([]);
 
-	const [{ user }, dispatch] = useStateValue();
+	const [{ user }] = useStateValue();
 
 	useEffect(() => {
 		const unsubscribe = onSnapshot(collection(db, "rooms"), (snapshot) => {
