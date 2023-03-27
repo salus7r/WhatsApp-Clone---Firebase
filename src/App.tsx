@@ -1,20 +1,34 @@
-import React from 'react';
+import React, { Suspense, useState } from "react";
+import { Route, Routes } from "react-router-dom";
 
-import Chat from "./components/Chat"
-import Sidebar from "./components/Sidebar"
+import Sidebar from "./components/Sidebar";
 
-import './App.css'
+const AsyncChat = React.lazy(
+	() => import(/* webpackChunkName: "ChatSection" */ "./components/Chat"),
+);
 
-function App() {
+import "./App.css";
 
-  return (
-    <div className="app">
-      <div className={"app__body"}>
-        <Sidebar />
-        <Chat />
-      </div>
-    </div>
-  )
-}
+const App: React.FC = () => {
+	const [user, setUser] = useState(null);
 
-export default App
+	return (
+		<div className="app">
+			{!user ? (
+				<h1>LOGIN</h1>
+			) : (
+				<div className={"app__body"}>
+					<Suspense fallback={"Loading..."}>
+						<Sidebar />
+						<Routes>
+							<Route path={"/rooms/:roomId"} element={<AsyncChat />} />
+							<Route path={"/"} element={<AsyncChat />} />
+						</Routes>
+					</Suspense>
+				</div>
+			)}
+		</div>
+	);
+};
+
+export default App;
