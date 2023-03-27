@@ -22,12 +22,11 @@ import db from "../../firebase";
 import "./chat.css";
 
 type Props = {};
-type Message = DocumentData;
 
 const Chat: React.FC<Props> = (props) => {
 	const [input, setInput] = useState("");
 	const [roomName, setRoomName] = useState("");
-	const [messages, setMessages] = useState<Message[]>([]);
+	const [messages, setMessages] = useState<DocumentData[]>([]);
 
 	const [{ user }] = useStateValue();
 
@@ -54,8 +53,8 @@ const Chat: React.FC<Props> = (props) => {
 		}
 
 		return () => {
-			unSubRoom();
-			unSubRoomCollection();
+			unSubRoom?.();
+			unSubRoomCollection?.();
 		};
 	}, [roomId]);
 

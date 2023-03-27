@@ -5,7 +5,13 @@
 	border-bottom: 1px solid #f6f6f6;
 }
 
-.sidebarChat:hover {
+a {
+	text-decoration: none !important;
+	color: black;
+}
+
+.sidebarChat:hover,
+.sidebarChat__active {
 	background-color: #ebebeb;
 }
 
@@ -22,4 +28,10 @@
 .sidebarChat__info > p {
 	font-size: 14.5px;
 	color: darkslategray;
+
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
