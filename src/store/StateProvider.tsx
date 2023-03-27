@@ -1,4 +1,4 @@
-import React, { createContext, PropsWithChildren, useContext, useReducer } from "react";
+import React, { createContext, Dispatch, PropsWithChildren, useContext, useReducer } from "react";
 import { Action, Store } from "./reducer";
 
 export type Props = {
@@ -6,7 +6,7 @@ export type Props = {
 	initialState: Store;
 };
 
-export const StateContext = createContext({});
+export const StateContext = createContext<[Store, Dispatch<Action>]>([{}, () => {}]);
 
 export const StateProvider = ({ reducer, initialState, children }: PropsWithChildren<Props>) => {
 	return (

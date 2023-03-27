@@ -13,7 +13,7 @@ const AsyncChat = React.lazy(
 import "./App.css";
 
 const App: React.FC = () => {
-	const [{ user }, dispatch] = useStateValue();
+	const [{ user }] = useStateValue();
 
 	return (
 		<div className="app">

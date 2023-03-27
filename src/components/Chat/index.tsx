@@ -75,7 +75,7 @@ const Chat: React.FC<Props> = (props) => {
 
 				await addDoc(collection(db, "rooms", roomId, "messages"), {
 					message: input,
-					name: user.displayName,
+					name: user?.displayName,
 					timestamp: serverTimestamp(),
 				});
 			} else {
@@ -116,7 +116,7 @@ const Chat: React.FC<Props> = (props) => {
 						<p
 							key={message.id}
 							className={`chat__message ${
-								message.name === user.displayName && "chat__receiver"
+								message.name === user?.displayName && "chat__receiver"
 							}`}
 						>
 							<span className="chat__name">{message.name}</span>

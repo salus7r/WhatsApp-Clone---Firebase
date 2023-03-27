@@ -1,4 +1,4 @@
-export const initialState = {
+export const initialState: Store = {
 	user: null,
 };
 
@@ -6,7 +6,9 @@ export const actionTypes = {
 	SET_USER: "SET_USER",
 };
 
-export type Store = typeof initialState;
+export type Store = {
+	user?: any;
+};
 
 export type Action = {
 	type: keyof typeof actionTypes;
@@ -15,9 +17,9 @@ export type Action = {
 
 export const setUser = (user: any) => {
 	return {
-		type: actionTypes.SET_USER,
+		type: "SET_USER",
 		payload: user,
-	};
+	} as Action;
 };
 
 const reducer = (state: Store, action: Action) => {
