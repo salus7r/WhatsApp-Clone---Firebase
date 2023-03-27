@@ -1,16 +1,37 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { doc, onSnapshot, Unsubscribe } from "firebase/firestore";
 import { Avatar, IconButton } from "@mui/material";
+import { useParams } from "react-router-dom";
 import { AttachFile, InsertEmoticon, Mic, MoreVert, SearchOutlined } from "@mui/icons-material";
 
 import useSeedAvatar from "./../../hooks/useSeedAvatar";
+
+import db from "../../firebase";
+
 import "./chat.css";
 
 type Props = {};
 
 const Chat: React.FC<Props> = (props) => {
-	const seed = useSeedAvatar();
-
 	const [input, setInput] = useState("");
+	const [roomName, setRoomName] = useState("");
+
+	const { roomId } = useParams();
+	const seed = useSeedAvatar(roomId);
+
+	useEffect(() => {
+		let unsubscribe: Unsubscribe;
+
+		if (roomId) {
+			unsubscribe = onSnapshot(doc(db, "rooms", roomId), (snapshot) => {
+				setRoomName(snapshot.data()?.name);
+			});
+		}
+
+		return () => {
+			unsubscribe();
+		};
+	}, [roomId]);
 
 	const sendMessage = useCallback(
 		(e: any) => {
@@ -27,7 +48,7 @@ const Chat: React.FC<Props> = (props) => {
 			<div className="chat__header">
 				<Avatar src={seed} />
 				<div className="chat__headerInfo">
-					<h3>Room Name</h3>
+					<h3>{roomName}</h3>
 					<p>Last seen at...</p>
 				</div>
 				<div className="chat__headerRight">
