@@ -4,12 +4,17 @@ import { BrowserRouter } from "react-router-dom";
 
 import App from "./App";
 
+import { StateProvider } from "./store/StateProvider";
+import reducer, { initialState } from "./store/reducer";
+
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 	<React.StrictMode>
-		<BrowserRouter>
-			<App />
-		</BrowserRouter>
+		<StateProvider initialState={initialState} reducer={reducer}>
+			<BrowserRouter>
+				<App />
+			</BrowserRouter>
+		</StateProvider>
 	</React.StrictMode>,
 );

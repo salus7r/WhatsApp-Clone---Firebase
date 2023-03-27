@@ -1,15 +1,27 @@
 import React, { useCallback } from "react";
 import { Button } from "@mui/material";
+import { signInWithPopup } from "firebase/auth";
 
-import { auth } from "../../firebase";
+import { auth, provider } from "../../firebase";
+
+import { setUser } from "./../../store/reducer";
+import { useStateValue } from "../../store/StateProvider";
 
 import "./login.css";
 
 type Props = {};
 
 const Login: React.FC<Props> = () => {
+	const [{ user }, dispatch] = useStateValue();
+
 	const signIn = useCallback(() => {
-		// auth.s;
+		signInWithPopup(auth, provider)
+			.then((result) => {
+				dispatch(setUser(result.user));
+			})
+			.catch((error) => {
+				alert(error.message);
+			});
 	}, []);
 
 	return (

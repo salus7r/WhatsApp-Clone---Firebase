@@ -1,8 +1,10 @@
-import React, { Suspense, useState } from "react";
+import React, { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import Login from "./components/Login";
 import Sidebar from "./components/Sidebar";
+
+import { useStateValue } from "./store/StateProvider";
 
 const AsyncChat = React.lazy(
 	() => import(/* webpackChunkName: "ChatSection" */ "./components/Chat"),
@@ -11,7 +13,7 @@ const AsyncChat = React.lazy(
 import "./App.css";
 
 const App: React.FC = () => {
-	const [user, setUser] = useState(null);
+	const [{ user }, dispatch] = useStateValue();
 
 	return (
 		<div className="app">
