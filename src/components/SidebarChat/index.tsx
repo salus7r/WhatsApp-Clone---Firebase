@@ -32,8 +32,6 @@ const SidebarChat: React.FC<Props> = (props) => {
 	const { roomId } = useParams();
 	const seed = useSeedAvatar();
 
-	console.log(roomId, id);
-
 	useEffect(() => {
 		let unSubRoomCollection: Unsubscribe;
 

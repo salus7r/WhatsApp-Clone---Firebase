@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 import { Button } from "@mui/material";
 import { signInWithPopup } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 import { auth, provider } from "../../firebase";
 
@@ -14,10 +15,13 @@ type Props = {};
 const Login: React.FC<Props> = () => {
 	const [{ user }, dispatch] = useStateValue();
 
+	const navigate = useNavigate();
+
 	const signIn = useCallback(() => {
 		signInWithPopup(auth, provider)
 			.then((result) => {
 				dispatch(setUser(result.user));
+				navigate("/");
 			})
 			.catch((error) => {
 				alert(error.message);

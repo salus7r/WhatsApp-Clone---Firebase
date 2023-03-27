@@ -22,11 +22,14 @@ import db from "../../firebase";
 import "./chat.css";
 
 type Props = {};
+type Message = DocumentData & {
+	id: string;
+};
 
 const Chat: React.FC<Props> = (props) => {
 	const [input, setInput] = useState("");
 	const [roomName, setRoomName] = useState("");
-	const [messages, setMessages] = useState<DocumentData[]>([]);
+	const [messages, setMessages] = useState<Message[]>([]);
 
 	const [{ user }] = useStateValue();
 
@@ -48,7 +51,12 @@ const Chat: React.FC<Props> = (props) => {
 			);
 
 			unSubRoomCollection = onSnapshot(q, (snapshot) => {
-				setMessages(snapshot.docs.map((doc) => doc.data()));
+				setMessages(
+					snapshot.docs.map((doc) => ({
+						...doc.data(),
+						id: doc.id,
+					})),
+				);
 			});
 		}
 
@@ -106,10 +114,10 @@ const Chat: React.FC<Props> = (props) => {
 				{messages?.map((message) => {
 					return (
 						<p
+							key={message.id}
 							className={`chat__message ${
 								message.name === user.displayName && "chat__receiver"
 							}`}
-							key={message.id}
 						>
 							<span className="chat__name">{message.name}</span>
 							{message.message}
