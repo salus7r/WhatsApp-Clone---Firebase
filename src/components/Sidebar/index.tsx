@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Avatar, IconButton } from "@mui/material";
 import { Chat, DonutLarge, MoreVert, SearchOutlined } from "@mui/icons-material";
-import { collection, query, onSnapshot, DocumentData } from "firebase/firestore";
+import { collection, onSnapshot, DocumentData } from "firebase/firestore";
+
+import SidebarChat from "../SidebarChat";
 
 import db from "../../firebase";
 
-import SidebarChat from "../SidebarChat";
 import "./sidebar.css";
 
 type Props = {};
@@ -18,10 +19,13 @@ const Sidebar: React.FC<Props> = (props) => {
 	const [rooms, setRooms] = useState<Room[]>([]);
 
 	useEffect(() => {
-		const q = query(collection(db, "rooms"));
-		const unsubscribe = onSnapshot(q, (querySnapshot) => {
-			setRooms(querySnapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() })));
+		const unsubscribe = onSnapshot(collection(db, "rooms"), (snapshot) => {
+			setRooms(snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() })));
 		});
+
+		return () => {
+			unsubscribe();
+		};
 	}, []);
 
 	return (
