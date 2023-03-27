@@ -1,6 +1,7 @@
 import React, { Suspense, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 
+import Login from "./components/Login";
 import Sidebar from "./components/Sidebar";
 
 const AsyncChat = React.lazy(
@@ -15,7 +16,7 @@ const App: React.FC = () => {
 	return (
 		<div className="app">
 			{!user ? (
-				<h1>LOGIN</h1>
+				<Login />
 			) : (
 				<div className={"app__body"}>
 					<Suspense fallback={"Loading..."}>
